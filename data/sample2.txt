@@ -1,0 +1,3 @@
+Release pipelines run on every merge to the main branch.
+They execute automated tests, static analysis, and security scans before deployment.
+Canary releases are used to minimize risk in production.

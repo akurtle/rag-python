@@ -1,0 +1,3 @@
+Our system follows a microservices architecture with separate services for authentication, billing, and reporting.
+Each service exposes a REST API and communicates over HTTP with JSON payloads.
+Quality checks include unit tests, integration tests, and contract tests.
