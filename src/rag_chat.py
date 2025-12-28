@@ -4,17 +4,15 @@ from chromadb.config import Settings
 
 from typing import List 
 
-from .utils import get_openai_client, build_prompt,get_embedding_function
+from .utils import get_openai_client, build_prompt,get_embedding_function,get_chroma_client
 
 
 DB_DIR = "./chroma_db"
 COLLECTION_NAME = "qa_docs"
 
 def retrieve_relevant_chunks(query: str, k: int =4 ) -> List[str]:
-    client = chromadb.PersistentClient(
-        path=DB_DIR,
-        settings=Settings(allow_reset=False)
-    )
+    client = get_chroma_client()
+
     collection= client.get_collection(name=COLLECTION_NAME)
 
     embedfn = get_embedding_function()

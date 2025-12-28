@@ -9,7 +9,8 @@ from chromadb.config import Settings
 
 from pypdf import PdfReader
 
-from .utils import get_embedding_function, get_openai_client, chunk_text
+from .utils import get_embedding_function, chunk_text,get_chroma_client
+
 
 DB_DIR = "./chroma_db"
 
@@ -99,13 +100,8 @@ def main():
             ids.append(f"doc{idx}_chunk{j}")
 
     
-    client = chromadb.PersistentClient(
+    client = get_chroma_client()
 
-        path= DB_DIR,
-
-        settings = Settings(allow_reset = True)
-    
-    )
 
     try:
         client.delete_collection(COLLECTION_NAME)

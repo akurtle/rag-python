@@ -3,8 +3,12 @@ import textwrap
 from typing import List
 from dotenv import load_dotenv
 from openai import OpenAI
-
+import chromadb
+from chromadb.config import Settings
 load_dotenv()
+
+
+DB_DIR = "../chroma_db"
 
 def get_openai_client() -> OpenAI:
     api_key = os.getenv("OPEN_API_KEY")
@@ -77,3 +81,9 @@ def get_embedding_function():
 
 
 
+
+def get_chroma_client():
+    return chromadb.PersistentClient(
+        path=DB_DIR,
+        settings=Settings(allow_reset=True)
+    )
