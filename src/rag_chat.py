@@ -41,7 +41,7 @@ def generate_answer(question:str, context_chunks: List[str]) -> str:
 
 
     response = client.chat.completions.create(
-        model="gpt-5-nano",  # or gpt-4o-mini / gpt-3.5-turbo depending on your access
+        model="gpt-5-nano", 
         messages=[
             {"role": "system", "content": "You are a concise assistant for software quality and documentation."},
             {"role": "user", "content": prompt},

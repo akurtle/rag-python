@@ -23,4 +23,4 @@ if __name__ == "__main__":
     answer, score = grounded_answer(q)
     print(f"Q: {q}")
     print(f"Answer: {answer}")
-    print(f"🔧 Grounding score: {score:.2f}")
+    print(f"Grounding score: {score:.2f}")
