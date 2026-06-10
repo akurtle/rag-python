@@ -8,7 +8,7 @@ from chromadb.config import Settings
 load_dotenv()
 
 
-DB_DIR = "../chroma_db"
+DB_DIR = "./chroma_db"
 
 def get_openai_client() -> OpenAI:
     api_key = os.getenv("OPEN_API_KEY")

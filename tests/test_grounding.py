@@ -1,4 +1,4 @@
-import pytest
+import pytest # type: ignore
 
 from src.rag_chat import retrieve_relevant_chunks, generate_answer
 
