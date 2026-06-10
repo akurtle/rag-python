@@ -3,7 +3,7 @@ import math
 import pytest
 
 from src.eval_grounding import grounded_answer
-from src.rag_chat import retrieve_relevant_chunks
+from src.rag_chat import retrieve_relevant_chunks, generate_answer
 from src.utils import get_embedding_function
 
 
@@ -33,6 +33,52 @@ def test_answer_is_grounded_in_context(question):
     assert score >= GROUNDING_THRESHOLD, (
         f"Answer for '{question}' may be hallucinated "
         f"(grounding score {score:.2f} < {GROUNDING_THRESHOLD})"
+    )
+
+
+# In-scope questions: the generated answer should actually contain the
+# key facts found in the source documents.
+ANSWER_CORRECTNESS_CASES = [
+    {
+        "question": "What types of tests are mentioned?",
+        "expected_keywords": ["unit", "integration", "contract"],
+    },
+    {
+        "question": "What type of releases minimize risk in production?",
+        "expected_keywords": ["canary"],
+    },
+    {
+        "question": "What architecture does the system follow?",
+        "expected_keywords": ["microservices"],
+    },
+]
+
+ANSWER_CORRECTNESS_THRESHOLD = 0.6
+
+
+@pytest.mark.parametrize("case", ANSWER_CORRECTNESS_CASES)
+def test_answer_is_correct_for_in_scope_questions(case):
+    """
+    Answer correctness: for in-scope questions, the generated answer
+    should contain the expected key facts from the source documents.
+    """
+    question = case["question"]
+    expected_keywords = case["expected_keywords"]
+
+    chunks = retrieve_relevant_chunks(question, k=4)
+    answer = generate_answer(question, chunks).lower()
+
+    hits = [kw for kw in expected_keywords if kw.lower() in answer]
+    coverage = len(hits) / len(expected_keywords)
+
+    print(f"\nQ: {question}")
+    print(f"Answer: {answer}")
+    print(f"Expected keywords: {expected_keywords}")
+    print(f"Hits: {hits}, coverage={coverage:.2f}")
+
+    assert coverage >= ANSWER_CORRECTNESS_THRESHOLD, (
+        f"Answer for '{question}' is missing expected information "
+        f"(coverage {coverage:.2f} < {ANSWER_CORRECTNESS_THRESHOLD})"
     )
 
 

@@ -65,3 +65,25 @@ store vectors in ChromaDB
 python -m src.rag_chat
 
 ```
+
+---
+
+## Testing & Quality Evaluation
+
+Run the full test suite with:
+
+```bash
+pytest -v
+```
+
+The suite covers:
+
+| Test file | Purpose |
+|-----------|---------|
+| `tests/test_retrieval.py` | Retrieval relevance — checks that retrieved chunks contain expected keywords for known questions |
+| `tests/test_grounding.py` | Hallucination detection — for out-of-scope questions, the model must admit it doesn't know rather than making things up |
+| `tests/test_hallucination_and_relevance.py` | Quantitative grounding score (% of answer tokens found in context), answer correctness for in-scope questions (expected facts present in the answer), and embedding-based cosine similarity between queries and retrieved chunks |
+| `tests/test_regression.py` | Semantic regression — flags drift if answers diverge too far from expected reference answers |
+| `tests/tests_robustness.py` | Fuzz testing — ensures the system handles empty, malformed, or adversarial queries without crashing |
+
+A session-scoped fixture (`tests/conftest.py`) automatically runs ingestion if `chroma_db/` is missing or empty, so the suite can run against a fresh checkout.
